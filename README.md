@@ -1,5 +1,5 @@
-# AXIS UART
-### UART TO AXIS
+# AXIS SPI
+### SPI TO AXIS
 
 ![image](docs/manual/img/AFRL.png)
 
@@ -7,9 +7,9 @@
 
    author: Jay Convertino   
    
-   date: 2021.06.23  
+   date: 2025.04.17
    
-   details: Interface UART data at some baud to a axi streaming 8 bit interface.   
+   details: Interface SPI data at some baud to a axi streaming 8 bit interface.
    
    license: MIT   
    
@@ -25,15 +25,17 @@
 ### DOCUMENTATION
   For detailed usage information, please navigate to one of the following sources. They are the same, just in a different format.
 
-  - [axis_uart.pdf](docs/manual/axis_uart.pdf)
-  - [github page](https://johnathan-convertino-afrl.github.io/axis_uart/)
+  - [axis_spi.pdf](docs/manual/axis_spi.pdf)
+  - [github page](https://johnathan-convertino-afrl.github.io/axis_spi/)
 
 ### DEPENDENCIES
 #### Build
   - AFRL:utility:helper:1.0.0
   
 #### Simulation
+
   - AFRL:simulation:axis_stimulator
+  - cocotb
 
 ### PARAMETERS
 
@@ -51,17 +53,16 @@
 ### COMPONENTS
 #### SRC
 
-* axis_uart.v
-* axis_uart_tx.v
-* axis_uart_rx.v
-* uart_baud_gen.v
+* axis_spi.v
+* spi_clk_gen.v
   
 #### TB
 
-* tb_uart.v
-* tb_uart_tx.v
-* tb_uart_rx.v
-* tb_uart_baud_gen.v
+* tb_spi.v
+* tb_cocotb.py
+* tb_cocotb.v
+* tb_cocotb_clk_gen.py
+* tb_cocotb_clk_gen.v
   
 ### FUSESOC
 
@@ -78,5 +79,5 @@
   - sim_8bit_count_data
   - sim_rand_ready_8bit_count_data
   - sim_baud
-  - sim_rx
-  - sim_tx
+  - sim_cocotb
+  - sim_cocotb_clk_gen

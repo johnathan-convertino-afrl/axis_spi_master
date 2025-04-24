@@ -1,47 +1,36 @@
 CAPI=2:
 
-name: AFRL:device_converter:axis_uart:1.0.0
-description: UART core with rx/tx only (no handshaking at the moment).
+name: AFRL:device_converter:axis_spi:1.0.0
+description: AXIS to/from SPI with clock polarity, phase, and baud rate options. Max rate is half the clock rate.
 
 filesets:
   src:
     files:
-      - src/axis_uart.v
-      - src/axis_uart_rx.v
-      - src/axis_uart_tx.v
+      - src/axis_spi.v
     file_type: verilogSource
   
   tb:
     files:
-      - tb/tb_uart.v
-      - tb/tb_uart_rx.v
-      - tb/tb_uart_tx.v
+      - tb/tb_spi.v
     file_type: verilogSource
 
-  tb_cocotb_full:
+  tb_cocotb:
     files:
-      - tb/tb_cocotb_full.py : {file_type : user, copyto : .}
-      - tb/tb_cocotb_full.v : { file_type: verilogSource }
-
-  tb_cocotb_rx:
-    files:
-      - tb/tb_cocotb_rx.py : {file_type : user, copyto : .}
-      - tb/tb_cocotb_rx.v : { file_type: verilogSource }
-
-  tb_cocotb_tx:
-    files:
-      - tb/tb_cocotb_tx.py : {file_type : user, copyto : .}
-      - tb/tb_cocotb_tx.v : { file_type: verilogSource }
+      - tb/tb_cocotb.py : {file_type : user, copyto : .}
+      - tb/tb_cocotb.v : { file_type: verilogSource }
 
   dep:
     depend:
-      - AFRL:clock:mod_clock_ena_gen:1.1.0
+      - AFRL:clock:mod_clock_ena_gen:1.1.1
       - AFRL:utility:helper:1.0.0
+      - AFRL:simple:piso:1.0.0
+      - AFRL:simple:sipo:1.0.0
       
   dep_tb:
     depend:
       - AFRL:simulation:axis_stimulator
       - AFRL:utility:sim_helper
+      - AFRL:simulation:clock_stimulator
     
 targets:
   default: &default
@@ -53,13 +42,12 @@ targets:
     description: Base simulation using icarus as default.
     default_tool: icarus
     filesets_append: [tb, dep_tb]
-    toplevel: tb_uart
+    toplevel: tb_spi
     hooks:
       post_run: ["tool_icarus ? (file_check_icarus)"]
     parameters:
       - IN_FILE_NAME
       - OUT_FILE_NAME
-      - RAND_READY
 
   sim_rand_data:
     <<: *sim
@@ -67,17 +55,6 @@ targets:
     parameters:
       - IN_FILE_NAME=random.bin
       - OUT_FILE_NAME=out_random.bin
-      - RAND_READY
-      - FIFO_DEPTH
-      
-  sim_rand_ready_rand_data:
-    <<: *sim
-    description: Use random data with a random ready as sim input.
-    parameters:
-      - IN_FILE_NAME=random.bin
-      - OUT_FILE_NAME=out_random.bin
-      - RAND_READY=1
-      - FIFO_DEPTH
       
   sim_8bit_count_data:
     <<: *sim
@@ -85,161 +62,54 @@ targets:
     parameters:
       - IN_FILE_NAME=8bit_count.bin
       - OUT_FILE_NAME=out_8bit_count.bin
-      - RAND_READY
-      - FIFO_DEPTH
-  
-  sim_rand_ready_8bit_count_data:
-    <<: *sim
-    description: Use counter data with a random ready as sim input.
-    parameters:
-      - IN_FILE_NAME=8bit_count.bin
-      - OUT_FILE_NAME=out_8bit_count.bin
-      - RAND_READY=1
-      - FIFO_DEPTH
-    
-  sim_rx:
-    <<: *sim
-    description: Simulate only the rx block.
-    toplevel: tb_uart_rx
-    parameters:
-      - IN_FILE_NAME
-      - OUT_FILE_NAME
-      - RAND_READY
-    
-  sim_tx:
-    <<: *sim
-    description: Simulate only the tx block.
-    toplevel: tb_uart_tx
-    parameters:
-      - IN_FILE_NAME
-      - OUT_FILE_NAME
-      - RAND_READY
 
-  sim_cocotb_full:
+  sim_cocotb:
     <<: *default
     description: Cocotb unit tests
     flow: sim
     flow_options:
       tool: icarus
-      cocotb_module: tb_cocotb_full
+      cocotb_module: tb_cocotb
       timescale: 1ns/1ns
       vcs_options: [-timescale=1ns/1ns]
-    filesets_append: [tb_cocotb_full]
+    filesets_append: [tb_cocotb]
     toplevel: tb_cocotb
     parameters:
-      - BAUD_CLOCK_SPEED
-      - PARITY_ENA
-      - STOP_BITS
-      - DATA_BITS
-      - BAUD_RATE
-      - PARITY_TYPE
-      - RX_DELAY
-      - RX_BAUD_DELAY
-      - TX_DELAY
-      - TX_BAUD_DELAY
-
-  sim_cocotb_rx:
-    <<: *default
-    description: Cocotb unit tests
-    flow: sim
-    flow_options:
-      tool: icarus
-      cocotb_module: tb_cocotb_rx
-      timescale: 1ns/1ns
-      vcs_options: [-timescale=1ns/1ns]
-    filesets_append: [tb_cocotb_rx]
-    toplevel: tb_cocotb
-    parameters:
-      - PARITY_ENA
-      - STOP_BITS
-      - DATA_BITS
-      - DELAY
-      - PARITY_TYPE
-
-  sim_cocotb_tx:
-    <<: *default
-    description: Cocotb unit tests
-    flow: sim
-    flow_options:
-      tool: icarus
-      cocotb_module: tb_cocotb_tx
-      timescale: 1ns/1ns
-      vcs_options: [-timescale=1ns/1ns]
-    filesets_append: [tb_cocotb_tx]
-    toplevel: tb_cocotb
-    parameters:
-      - PARITY_ENA
-      - STOP_BITS
-      - DATA_BITS
-      - DELAY
-      - PARITY_TYPE
+      - CLOCK_SPEED
+      - RATE
+      - RAND_READY
 
 parameters:
-  PARITY_ENA:
+  RAND_READY:
     datatype    : int
     default     : 0
-    description : Enable parity by setting to 1.
-    paramtype   : vlogparam
-    
-  STOP_BITS:
-    datatype    : int
-    default     : 1
-    description : Number of stop bits for the uart.
+    description : If set to anything other than 0, the ready signal to the DUT will be randomized.
     paramtype   : vlogparam
 
-  DATA_BITS:
-    datatype    : int
-    default     : 8
-    description : Number of data bits per transmission.
+  IN_FILE_NAME:
+    datatype    : file
+    default     : const_data_small.bin
+    description : input file name
     paramtype   : vlogparam
 
-  DELAY:
-    datatype    : int
-    default     : 0
-    description : Number of clock cycles to delay transmission.
+  OUT_FILE_NAME:
+    datatype    : file
+    default     : out_const_data_small.bin
+    description : output file name
     paramtype   : vlogparam
 
-  BAUD_CLOCK_SPEED:
+  CLOCK_SPEED:
     datatype    : int
-    default     : 100000000
-    description : clock rate for uart_clk (this is divided for clock rate).
+    default     : 10000000
+    description : clock rate for system (this is divided down to rate as an enable).
     paramtype   : vlogparam
 
-  BAUD_RATE:
+  RATE:
     datatype    : int
     default     : 115200
-    description : Baud rate
+    description : data rate
     paramtype   : vlogparam
 
-  PARITY_TYPE:
-    datatype    : int
-    default     : 0
-    description : Parity type
-    paramtype   : vlogparam
-
-  RX_DELAY:
-    datatype    : int
-    default     : 0
-    description : RX Delay
-    paramtype   : vlogparam
-
-  RX_BAUD_DELAY:
-    datatype    : int
-    default     : 0
-    description : RX Baud Delay
-    paramtype   : vlogparam
-
-  TX_DELAY:
-    datatype    : int
-    default     : 0
-    description : TX Delay
-    paramtype   : vlogparam
-
-  TX_BAUD_DELAY:
-    datatype    : int
-    default     : 0
-    description : TX Baud Delay
-    paramtype   : vlogparam
 
 scripts:
   file_check_icarus:
