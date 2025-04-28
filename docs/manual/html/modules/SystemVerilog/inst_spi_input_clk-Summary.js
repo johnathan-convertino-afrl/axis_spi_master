@@ -1,0 +1,1 @@
+﻿NDFramePage.OnPageTitleLoaded("SystemVerilogModule:inst_spi_input_clk","inst_spi_input_clk");NDSummary.OnSummaryLoaded("SystemVerilogModule:inst_spi_input_clk",[["SystemVerilog","SystemVerilog"]],[["Modules","Module"]],[[24,0,0,"inst_spi_input_clk"]]);

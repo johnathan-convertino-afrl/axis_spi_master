@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("err",["Variable"],[["error",,[["axis_spi",,,,0,"File:axis_spi.v:axis_spi.error","SystemVerilogModule:axis_spi:error"]]]]);

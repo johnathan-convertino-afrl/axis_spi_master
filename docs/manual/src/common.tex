@@ -1,7 +1,7 @@
 \begin{titlepage}
   \begin{center}
 
-  {\Huge AXIS\_UART}
+  {\Huge AXIS SPI}
 
   \vspace{25mm}
 
@@ -27,11 +27,10 @@
 \subsection{Introduction}
 
 \par
-Simple UART core for TTL rs232 software mode data communications. No hardware handshake.
-This contains its own internal baud rate generator that creates an enable to allow data output
-or sampling. Baud clock and aclk can be the same clock.
-
-RTS/CTS is not implemented, it simply asserts it as if its always ready, and ignores CTS.
+The intent of this core is to provide a base AXIS to SPI interface. It is capable of back to back transfers with zero wait time.
+The data can be output at any rate up to half the input clock. The core SPI clock is generated for external use only and should
+NOT be routed into any logic. This device also does the chip selection based on the current activity of the core. CPOL/CPHA can
+be altered at anytime.
 
 \subsection{Dependencies}
 
@@ -48,20 +47,30 @@ The following are the dependencies of the cores.
 
 \subsection{In a Project}
 \par
-This core connects a UART to the AXIS bus. Meaning this is a streaming device only. Connect the RX/TX to the UART in question and connect the AXIS to its intended endpoints.
+This core connects a SPI to the AXIS bus. Meaning this is a streaming device only. Connect the MOSI/MISO to the SPI device in question and connect the AXIS to its intended endpoints.
 
 \section{Architecture}
 \par
-This core is made up of other cores that are documented in detail in there source. The cores this is made up of are the,
+The core for this contains the following:
 \begin{itemize}
-  \item \textbf{axis\_uart\_tx} Interface with UART TX and present the data over AXIS interface (see core for documentation).
-  \item \textbf{axis\_uart\_rx} Interface with UART RX and present the data over AXIS interface (see core for documentation).
+  \item \textbf{axis\_spi} Interface with SPI to AXIS interface.
+  \item \textbf{mod\_clock\_ena\_gen} Generate an enable used to sample data for piso/sipo.
+  \item \textbf{piso} Take parallel data and output it in serial.
+  \item \textbf{sipo} Take serial data and output it in parallel.
 \end{itemize}
+
+The main core is made to interface a AXIS bus to the SPI bus. This is done using the SIPO and PISO cores to change from serial to parallel data streams.
+In addition mod clock enable gen cores create the negative and positive enables based upon the input clock and set rate to sample the data. This is then
+glued together in the core with some logic to output the approtpriate SPI signals, including a generated clock. This generated clock is created by
+the mod clock gen enables only and is NOT used to clock any internal signals. Use only as a output clock. The core allows for any rate to be used up to
+half the input clock. The clock phase and polarity can be changed on the fly at anytime. All word transfers are the size of the AXIS bus. If multiple
+byte transfers of varing sizes are needed. It is recommened to set this to one byte width for the AXIS data bus and do back to back transfers for the
+number needed. Basically having data available to the core as soon as it can get it means there will be no gap in the spi output.
 
 \section{Building}
 
 \par
-The AXIS UART is written in Verilog 2001. It should synthesize in any modern FPGA software. The core comes as a fusesoc packaged core and can be
+The AXIS SPI is written in Verilog 2001. It should synthesize in any modern FPGA software. The core comes as a fusesoc packaged core and can be
 included in any other core. Be sure to make sure you have meet the dependencies listed in the previous section.
 
 \subsection{fusesoc}
@@ -105,10 +114,12 @@ There are a few different simulations that can be run for this core.
 \par
 iverilog is used for simple test benches for quick verification, visually, of the core.
 \begin{itemize}
-  \item \textbf{sim} Standard simulation of TX/RX looped.
-  \item \textbf{sim\_rx} Simulation of receive only.
-  \item \textbf{sim\_tx} Simulation of transmit only.
+  \item \textbf{sim} Standard simulation of SPI looped, input/output verification.
 \end{itemize}
+
+This uses a axis stimulator cores for master/slave. This will run all the data in the slave axis SPI interface, which
+will output the data over the SPI interface. This is then looped into the SPI input that then puts the valid data out
+on the master axis SPI interface.
 
 \subsection{cocotb}
 \par
@@ -116,21 +127,20 @@ To use the cocotb tests you must install the following python libraries.
 \begin{lstlisting}[language=bash]
   $ pip install cocotb
   $ pip install cocotbext-axi
+  $ pip install cocotbext-spi
 \end{lstlisting}
 
 Each module has a cocotb based simulation. These use the cocotb extensions made by Alex.
-The two extensions used are cocotbext-axi and cocotbext-uart. These provide outside verification
-of the implimentation. These tests consist of 3 different fusesoc targets.
+The two extensions used are cocotbext-axi and cocotbext-spi. These provide outside verification
+of the implimentation. These tests consist of the following fusesoc targets.
 
 \begin{itemize}
-  \item \textbf{sim\_cocotb\_full} Standard simulation of TX/RX passing data to and from cocotbexts.
-  \item \textbf{sim\_cocotb\_rx} Simulation of data receive using cocotbext.
-  \item \textbf{sim\_cocotb\_tx} Simulation of data transmit using cocotbext.
+  \item \textbf{sim\_cocotb} Standard simulation of SPI data to and from cocotbexts this tests all CPOL/CPHA options.
 \end{itemize}
 
-Then you must use the cocotb sim target. The targets above can be run with various bus and fifo parameters.
+Then you must use the cocotb sim target. The targets above can be run with the following:
 \begin{lstlisting}[language=bash]
-  $ fusesoc run --target AFRL:device_converter:axis_uart:1.0.0
+  $ fusesoc run --target sim_cocotb AFRL:device_converter:axis_spi:1.0.0
 \end{lstlisting}
 
 \newpage
@@ -138,9 +148,10 @@ Then you must use the cocotb sim target. The targets above can be run with vario
 \section{Module Documentation} \label{Module Documentation}
 
 \begin{itemize}
-\item \textbf{axis\_uart\_tx} Interfaces AXIS to the UART transmit line.\\
-\item \textbf{axis\_uart\_rx} Interfaces AXIS to the UART receive line.\\
-\item \textbf{axis\_uart} Wrapper for all of the above modules to create a singular device to interface with.\\
+  \item \textbf{axis\_spi} Interfaces AXIS to SPI.\\
+  \item \textbf{tb\_spi} Verilog test bench.\\
+  \item \textbf{tb\_cocotb verilog} Verilog test bench base for cocotb.\\
+  \item \textbf{tb\_cocotb python} cocotb unit test functions.\\
 \end{itemize}
 
 

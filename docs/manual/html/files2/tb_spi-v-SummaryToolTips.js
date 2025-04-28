@@ -1,0 +1,1 @@
+﻿NDSummary.OnToolTipsLoaded("File2:tb_spi.v",{7:"<div class=\"NDToolTip TInformation LSystemVerilog\"><div class=\"TTSummary\">Test bench for AXIS SPI</div></div>",8:"<div class=\"NDToolTip TInformation LSystemVerilog\"><div class=\"TTSummary\">Copyright 2025 Jay Convertino</div></div>"});

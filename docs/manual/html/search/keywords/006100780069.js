@@ -1,0 +1,1 @@
+﻿NDSearch.OnPrefixDataLoaded("axi",["Module","File"],[["axis_spi",,[[,,,,0,"File:axis_spi.v:axis_spi","SystemVerilogModule:axis_spi"],[,"axis_spi.v",,,1,"File:axis_spi.v:axis_spi.v"]]]]);
