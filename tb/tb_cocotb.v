@@ -43,6 +43,7 @@
  *   CLOCK_SPEED      - This is the aclk frequency in Hz, this is the the frequency used for the bus and is divided by the rate.
  *   BUS_WIDTH        - AXIS data width in bytes.
  *   SELECT_WIDTH     - Bit width of the slave select.
+ *   RATE             - Select the data rate of the spi core.
  *
  * Ports:
  *
@@ -67,8 +68,7 @@ module tb_cocotb #(
     parameter CLOCK_SPEED   = 2000000,
     parameter BUS_WIDTH     = 4,
     parameter SELECT_WIDTH  = 1,
-    parameter RAND_READY    = 0,
-    parameter RATE          = 1000000
+    parameter RATE          = 115200
   )
   (
     input                     aclk,
@@ -89,7 +89,7 @@ module tb_cocotb #(
     input                     cpha
   );
 
-  wire loop;
+  // wire loop;
 
   // fst dump command
   initial begin
@@ -119,8 +119,8 @@ module tb_cocotb #(
     .m_axis_tvalid(m_axis_tvalid),
     .m_axis_tready(m_axis_tready),
     .sclk(sclk),
-    .mosi(loop),
-    .miso(loop),
+    .mosi(mosi),
+    .miso(miso),
     .ssn_i(ssn_i),
     .ssn_o(ssn_o),
     .rate(rate),

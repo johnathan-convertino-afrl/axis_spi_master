@@ -37,7 +37,10 @@ module tb_spi #
   (
   parameter IN_FILE_NAME = "in.bin",
   parameter OUT_FILE_NAME = "out.bin",
-  parameter RAND_READY = 0
+  parameter RAND_READY = 0,
+  parameter CLOCK_DIVIDER = 2,
+  parameter CPOL = 0,
+  parameter CPHA = 0
   );
 
   localparam CLOCK_BASE   = 200000000;
@@ -105,9 +108,9 @@ module tb_spi #
     .miso(tb_spi_loop),
     .ssn_i({SELECT_WIDTH/2{2'b10}}),
     .ssn_o(tb_ssn),
-    .rate(CLOCK_BASE/10),
-    .cpol(1'b0),
-    .cpha(1'b0)
+    .rate(CLOCK_BASE/CLOCK_DIVIDER),
+    .cpol(CPOL),
+    .cpha(CPHA)
   );
   
   master_axis_stimulus #(
