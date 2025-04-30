@@ -1,4 +1,4 @@
-PROJECT_NAME := axis_spi
+PROJECT_NAME := axis_spi_master
 
 MK_DIR := makefiles
 

@@ -1,5 +1,5 @@
-# AXIS SPI
-### SPI TO AXIS
+# AXIS SPI MASTER
+### SPI Master Only TO AXIS with CPOL/CPHA and rate selection.
 
 ![image](docs/manual/img/AFRL.png)
 
@@ -25,8 +25,8 @@
 ### DOCUMENTATION
   For detailed usage information, please navigate to one of the following sources. They are the same, just in a different format.
 
-  - [axis_spi.pdf](docs/manual/axis_spi.pdf)
-  - [github page](https://johnathan-convertino-afrl.github.io/axis_spi/)
+  - [axis_spi_master.pdf](docs/manual/axis_spi_master.pdf)
+  - [github page](https://johnathan-convertino-afrl.github.io/axis_spi_master/)
 
 ### DEPENDENCIES
 #### Build
@@ -50,7 +50,7 @@
 ### COMPONENTS
 #### SRC
 
-* axis_spi.v
+* axis_spi_master.v
   
 #### TB
 

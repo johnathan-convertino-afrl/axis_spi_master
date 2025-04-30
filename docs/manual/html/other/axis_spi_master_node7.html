@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2024 (Released January 1, 2024) -->
+<HTML lang="en">
+<HEAD>
+<TITLE>Architecture</TITLE>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2024">
+
+<LINK REL="STYLESHEET" HREF="html.css">
+
+<LINK REL="next" HREF="axis_spi_master_node8.html">
+<LINK REL="previous" HREF="axis_spi_master_node2.html">
+<LINK REL="next" HREF="axis_spi_master_node8.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="axis_spi_master_node8.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="html.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="axis_spi_master_node6.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html59"
+  HREF="axis_spi_master_node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="axis_spi_master_node8.html">Building</A>
+<B> Up:</B> <A
+ HREF="html.html">html</A>
+<B> Previous:</B> <A
+ HREF="axis_spi_master_node6.html">In a Project</A>
+ &nbsp; <B>  <A ID="tex2html60"
+  HREF="axis_spi_master_node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H1><A ID="SECTION00030000000000000000">
+Architecture</A>
+</H1>
+
+<P>
+The core for this contains the following:
+
+<UL>
+<LI><SPAN  CLASS="textbf">axis_spi</SPAN> Interface with SPI to AXIS interface.
+</LI>
+<LI><SPAN  CLASS="textbf">mod_clock_ena_gen</SPAN> Generate an enable used to sample data for piso/sipo.
+</LI>
+<LI><SPAN  CLASS="textbf">piso</SPAN> Take parallel data and output it in serial.
+</LI>
+<LI><SPAN  CLASS="textbf">sipo</SPAN> Take serial data and output it in parallel.
+</LI>
+</UL>
+
+<P>
+The main core is made to interface a AXIS bus to the SPI bus. This is done using the SIPO and PISO cores to change from serial to parallel data streams.
+In addition mod clock enable gen cores create the negative and positive enables based upon the input clock and set rate to sample the data. This is then
+glued together in the core with some logic to output the approtpriate SPI signals, including a generated clock. This generated clock is created by
+the mod clock gen enables only and is NOT used to clock any internal signals. Use only as a output clock. The core allows for any rate to be used up to
+half the input clock. The clock phase and polarity can be changed on the fly at anytime. All word transfers are the size of the AXIS bus. If multiple
+byte transfers of varing sizes are needed. It is recommened to set this to one byte width for the AXIS data bus and do back to back transfers for the
+number needed. Basically having data available to the core as soon as it can get it means there will be no gap in the spi output.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="axis_spi_master_node8.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="html.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="axis_spi_master_node6.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html59"
+  HREF="axis_spi_master_node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="axis_spi_master_node8.html">Building</A>
+<B> Up:</B> <A
+ HREF="html.html">html</A>
+<B> Previous:</B> <A
+ HREF="axis_spi_master_node6.html">In a Project</A>
+ &nbsp; <B>  <A ID="tex2html60"
+  HREF="axis_spi_master_node1.html">Contents</A></B> </DIV>
+<!--End of Navigation Panel-->
+
+</BODY>
+</HTML>

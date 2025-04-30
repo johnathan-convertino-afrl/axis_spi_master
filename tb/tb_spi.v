@@ -89,8 +89,8 @@ module tb_spi #
     .eof(tb_eof)
   );
 
-    //device under test
-  axis_spi #(
+  //device under test
+  axis_spi_master #(
     .CLOCK_SPEED(CLOCK_BASE),
     .BUS_WIDTH(BUS_WIDTH),
     .SELECT_WIDTH(SELECT_WIDTH)
@@ -110,7 +110,9 @@ module tb_spi #
     .ssn_o(tb_ssn),
     .rate(CLOCK_BASE/CLOCK_DIVIDER),
     .cpol(CPOL),
-    .cpha(CPHA)
+    .cpha(CPHA),
+    .miso_dcount(),
+    .mosi_dcount()
   );
   
   master_axis_stimulus #(

@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("rea",["Variable"],[["ready",,[["axis_spi",,,,0,"File:axis_spi.v:axis_spi.ready","SystemVerilogModule:axis_spi:ready"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("rea",["Variable"],[["ready",,[["axis_spi_master",,,,0,"File:axis_spi_master.v:axis_spi_master.ready","SystemVerilogModule:axis_spi_master:ready"]]]]);

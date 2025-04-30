@@ -1,1 +1,1 @@
-﻿NDMenu.OnSectionLoaded("files.js",[[2,"source","File:",[[1,"axis_spi.v"]]],[2,"test_bench","File2:",[[1,"tb_cocotb.py"],[1,"tb_cocotb.v"],[1,"tb_spi.v"]]]]);
+﻿NDMenu.OnSectionLoaded("files.js",[[2,"source","File:",[[1,"axis_spi_master.v"]]],[2,"test_bench","File2:",[[1,"tb_cocotb.py"],[1,"tb_cocotb.v"],[1,"tb_spi.v"]]]]);

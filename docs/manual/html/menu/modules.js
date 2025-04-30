@@ -1,1 +1,1 @@
-﻿NDMenu.OnSectionLoaded("modules.js",[[1,"axis_spi"],[1,"dut"],[1,"inst_piso"],[1,"inst_sipo"],[1,"inst_spi_input_clk"],[1,"inst_spi_output_clk"],[1,"tb_cocotb"]]);
+﻿NDMenu.OnSectionLoaded("modules.js",[[1,"axis_spi_master"],[1,"dut"],[1,"inst_piso"],[1,"inst_sipo"],[1,"inst_spi_input_clk"],[1,"inst_spi_output_clk"],[1,"tb_cocotb"]]);

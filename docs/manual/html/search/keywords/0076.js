@@ -1,1 +1,1 @@
-﻿NDSearch.OnPrefixDataLoaded("v",["File"],[["v",,[[,"axis_spi.v",,,0,"File:axis_spi.v:axis_spi.v"],[,"tb_cocotb.v",,,0,"File2:tb_cocotb.v:tb_cocotb.v"],[,"tb_spi.v",,,0,"File2:tb_spi.v:tb_spi.v"]]]]);
+﻿NDSearch.OnPrefixDataLoaded("v",["File"],[["v",,[[,"axis_spi_master.v",,,0,"File:axis_spi_master.v:axis_spi_master.v"],[,"tb_cocotb.v",,,0,"File2:tb_cocotb.v:tb_cocotb.v"],[,"tb_spi.v",,,0,"File2:tb_spi.v:tb_spi.v"]]]]);

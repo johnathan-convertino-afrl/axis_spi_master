@@ -1,12 +1,12 @@
 CAPI=2:
 
-name: AFRL:device_converter:axis_spi:1.0.0
-description: AXIS to/from SPI with clock polarity, phase, and baud rate options. Max rate is half the clock rate.
+name: AFRL:device_converter:axis_spi_master:1.0.0
+description: AXIS to/from SPI with clock polarity, phase, and baud rate options. Max rate is half the clock rate. This is a master only device.
 
 filesets:
   src:
     files:
-      - src/axis_spi.v
+      - src/axis_spi_master.v
     file_type: verilogSource
   
   tb:

@@ -63,6 +63,8 @@
  *   rate           - output rate of spi core.
  *   cpol           - clock polarity of spi_clk
  *   cpha           - clock phase of spi_clk
+ *   miso_dcount    - Current number of input bits available from parallel register.
+ *   mosi_dcount    - current number of output bits available to serial shift output.
  */
 module tb_cocotb #(
     parameter CLOCK_SPEED   = 2000000,
@@ -86,7 +88,9 @@ module tb_cocotb #(
     output [SELECT_WIDTH-1:0] ssn_o,
     input  [31:0]             rate,
     input                     cpol,
-    input                     cpha
+    input                     cpha,
+    output [BUS_WIDTH*8-1:0]  miso_dcount,
+    output [BUS_WIDTH*8-1:0]  mosi_dcount
   );
 
   // wire loop;
@@ -103,9 +107,9 @@ module tb_cocotb #(
   /*
    * Module: dut
    *
-   * Device under test, axis_spi
+   * Device under test, axis_spi_master
    */
-  axis_spi #(
+  axis_spi_master #(
     .CLOCK_SPEED(CLOCK_SPEED),
     .BUS_WIDTH(BUS_WIDTH),
     .SELECT_WIDTH(SELECT_WIDTH)
@@ -125,7 +129,9 @@ module tb_cocotb #(
     .ssn_o(ssn_o),
     .rate(rate),
     .cpol(cpol),
-    .cpha(cpha)
+    .cpha(cpha),
+    .miso_dcount(miso_dcount),
+    .mosi_dcount(mosi_dcount)
   );
   
 
