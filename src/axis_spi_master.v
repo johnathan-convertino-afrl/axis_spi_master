@@ -2,14 +2,14 @@
 // file:    axis_spi_master.v
 //
 // author:  JAY CONVERTINO
-//file:///home/convertinoj/Documents/research/sdcard/CARD
+//
 // date:    2025/04/22
 //
 // about:   Brief
 // Stream SPI input/output data over AXIS bus.
 //
 // license: License MIT
-// Copyright 2025 Jay Convertinofile:///home/convertinoj/Documents/research/sdcard/CARD
+// Copyright 2025 Jay Convertino
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to
