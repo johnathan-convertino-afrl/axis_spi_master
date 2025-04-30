@@ -3,7 +3,7 @@
 <!--Converted with LaTeX2HTML 2024 (Released January 1, 2024) -->
 <HTML lang="en">
 <HEAD>
-<TITLE>Building</TITLE>
+<TITLE>Ports</TITLE>
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
 <META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
@@ -11,7 +11,7 @@
 
 <LINK REL="STYLESHEET" HREF="html.css">
 
-<LINK REL="next" HREF="axis_spi_master_node15.html">
+<LINK REL="next" HREF="axis_spi_master_node9.html">
 <LINK REL="previous" HREF="axis_spi_master_node7.html">
 <LINK REL="next" HREF="axis_spi_master_node9.html">
 </HEAD>
@@ -23,61 +23,35 @@
  HREF="axis_spi_master_node9.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="html.html">
+ HREF="axis_spi_master_node7.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="axis_spi_master_node7.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html61"
+<A ID="tex2html72"
   HREF="axis_spi_master_node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="axis_spi_master_node9.html">fusesoc</A>
+ HREF="axis_spi_master_node9.html">Waveforms</A>
 <B> Up:</B> <A
- HREF="html.html">html</A>
+ HREF="axis_spi_master_node7.html">Architecture</A>
 <B> Previous:</B> <A
  HREF="axis_spi_master_node7.html">Architecture</A>
- &nbsp; <B>  <A ID="tex2html62"
+ &nbsp; <B>  <A ID="tex2html73"
   HREF="axis_spi_master_node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A ID="SECTION00040000000000000000">
-Building</A>
-</H1>
+<H2><A ID="SECTION00031000000000000000">
+Ports</A>
+</H2>
+A port list is availabe, with specific signal information, in the <A HREF="axis_spi_master_node20.html#Module_Documentation"><IMG  ALT="[*]" SRC="crossref.png"></A>. The generalized idea is a AXIS slave input
+for MOSI data. A AXIS master output for MISO data, and a master SPI interface with sclk, mosi, miso, and ss_n signals. The dcount outputs
+give insight into the status of the in/out data bits of the core.
 
 <P>
-The AXIS SPI is written in Verilog 2001. It should synthesize in any modern FPGA software. The core comes as a fusesoc packaged core and can be
-included in any other core. Be sure to make sure you have meet the dependencies listed in the previous section.
-
-<P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
-
-<UL CLASS="ChildLinks">
-<LI><A ID="tex2html63"
-  HREF="axis_spi_master_node9.html">fusesoc</A>
-<LI><A ID="tex2html64"
-  HREF="axis_spi_master_node10.html">Source Files</A>
-<UL>
-<LI><A ID="tex2html65"
-  HREF="axis_spi_master_node11.html">fusesoc_info File List</A>
-</UL>
-<BR>
-<LI><A ID="tex2html66"
-  HREF="axis_spi_master_node12.html">Targets</A>
-<UL>
-<LI><A ID="tex2html67"
-  HREF="axis_spi_master_node13.html">fusesoc_info Targets</A>
-</UL>
-<BR>
-<LI><A ID="tex2html68"
-  HREF="axis_spi_master_node14.html">Directory Guide</A>
-</UL>
-<!--End of Table of Child-Links-->
 <BR><HR>
 
 </BODY>

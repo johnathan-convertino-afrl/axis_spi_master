@@ -3,7 +3,7 @@
 <!--Converted with LaTeX2HTML 2024 (Released January 1, 2024) -->
 <HTML lang="en">
 <HEAD>
-<TITLE>fusesoc</TITLE>
+<TITLE>Waveforms</TITLE>
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
 <META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
@@ -11,7 +11,6 @@
 
 <LINK REL="STYLESHEET" HREF="html.css">
 
-<LINK REL="next" HREF="axis_spi_master_node10.html">
 <LINK REL="previous" HREF="axis_spi_master_node8.html">
 <LINK REL="next" HREF="axis_spi_master_node10.html">
 </HEAD>
@@ -23,35 +22,104 @@
  HREF="axis_spi_master_node10.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="axis_spi_master_node8.html">
+ HREF="axis_spi_master_node7.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="axis_spi_master_node8.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html69"
+<A ID="tex2html74"
   HREF="axis_spi_master_node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="axis_spi_master_node10.html">Source Files</A>
+ HREF="axis_spi_master_node10.html">Building</A>
 <B> Up:</B> <A
- HREF="axis_spi_master_node8.html">Building</A>
+ HREF="axis_spi_master_node7.html">Architecture</A>
 <B> Previous:</B> <A
- HREF="axis_spi_master_node8.html">Building</A>
- &nbsp; <B>  <A ID="tex2html70"
+ HREF="axis_spi_master_node8.html">Ports</A>
+ &nbsp; <B>  <A ID="tex2html75"
   HREF="axis_spi_master_node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00041000000000000000">
-fusesoc</A>
+<H2><A ID="SECTION00032000000000000000">
+Waveforms</A>
 </H2>
+The idealized simulation waveforms are shown below. The values reflect the results of using the icarus backend with GTKwaveform view tools.
 
 <P>
-Fusesoc is a system for building FPGA software without relying on the internal project management of the tool. Avoiding vendor lock in to Vivado or Quartus.
-These cores, when included in a project, can be easily integrated and targets created based upon the end developer needs. The core by itself is not a part of
-a system and should be integrated into a fusesoc based system. Simulations are setup to use fusesoc and are a part of its targets.
+Back to back transfers will naturally occur if data is available in time for the next ready. This allows for zero intertransmission gaps.
+
+<DIV class="CENTER"><A ID="43"></A>
+<TABLE>
+<CAPTION class="BOTTOM"><STRONG>Figure:</STRONG>
+CPOL = 0 : CPHA = 0</CAPTION>
+<TR><TD>
+<DIV class="CENTER"><IMG
+ STYLE="height: 16.61ex; vertical-align: -0.12ex; " SRC="axis_spi_master_img2.svg"
+ ALT="\includegraphics[width=\textwidth]{img/diagrams/waveform_00_back_to_back.png}">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+The following figures are not back to back transfers. Meaning there is a some gap in the time a new word is available. This could be done on purpose
+due to SPI slave needs and can easily done by looking at the counter values of the core.
+
+<DIV class="CENTER"><A ID="47"></A>
+<TABLE>
+<CAPTION class="BOTTOM"><STRONG>Figure:</STRONG>
+CPOL = 0 : CPHA = 0</CAPTION>
+<TR><TD>
+<DIV class="CENTER"><IMG
+ STYLE="height: 16.90ex; vertical-align: -0.12ex; " SRC="axis_spi_master_img3.svg"
+ ALT="\includegraphics[width=\textwidth]{img/diagrams/waveform_00_spaced.png}">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV class="CENTER"><A ID="51"></A>
+<TABLE>
+<CAPTION class="BOTTOM"><STRONG>Figure:</STRONG>
+CPOL = 0 : CPHA = 1</CAPTION>
+<TR><TD>
+<DIV class="CENTER"><IMG
+ STYLE="height: 16.52ex; vertical-align: -0.12ex; " SRC="axis_spi_master_img4.svg"
+ ALT="\includegraphics[width=\textwidth]{img/diagrams/waveform_01_spaced.png}">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV class="CENTER"><A ID="55"></A>
+<TABLE>
+<CAPTION class="BOTTOM"><STRONG>Figure:</STRONG>
+CPOL = 1 : CPHA = 0</CAPTION>
+<TR><TD>
+<DIV class="CENTER"><IMG
+ STYLE="height: 16.56ex; vertical-align: -0.12ex; " SRC="axis_spi_master_img5.svg"
+ ALT="\includegraphics[width=\textwidth]{img/diagrams/waveform_10_spaced.png}">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<DIV class="CENTER"><A ID="59"></A>
+<TABLE>
+<CAPTION class="BOTTOM"><STRONG>Figure:</STRONG>
+CPOL = 1 : CPHA = 1</CAPTION>
+<TR><TD>
+<DIV class="CENTER"><IMG
+ STYLE="height: 16.60ex; vertical-align: -0.12ex; " SRC="axis_spi_master_img6.svg"
+ ALT="\includegraphics[width=\textwidth]{img/diagrams/waveform_11_spaced.png}">
+</DIV></TD></TR>
+</TABLE>
+</DIV>
 
 <P>
 <BR><HR>

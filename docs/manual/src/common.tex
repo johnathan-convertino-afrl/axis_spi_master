@@ -67,6 +67,49 @@ half the input clock. The clock phase and polarity can be changed on the fly at 
 byte transfers of varing sizes are needed. It is recommened to set this to one byte width for the AXIS data bus and do back to back transfers for the
 number needed. Basically having data available to the core as soon as it can get it means there will be no gap in the spi output.
 
+\subsection{Ports}
+A port list is availabe, with specific signal information, in the \ref{Module Documentation}. The generalized idea is a AXIS slave input
+for MOSI data. A AXIS master output for MISO data, and a master SPI interface with sclk, mosi, miso, and ss\_n signals. The dcount outputs
+give insight into the status of the in/out data bits of the core.
+
+\subsection{Waveforms}
+The idealized simulation waveforms are shown below. The values reflect the results of using the icarus backend with GTKwaveform view tools.
+
+\par
+Back to back transfers will naturally occur if data is available in time for the next ready. This allows for zero intertransmission gaps.
+\begin{figure}[H]
+\caption{CPOL = 0 : CPHA = 0}
+\centering
+\includegraphics[width=\textwidth]{img/diagrams/waveform_00_back_to_back.png}
+\end{figure}
+
+\par
+The following figures are not back to back transfers. Meaning there is a some gap in the time a new word is available. This could be done on purpose
+due to SPI slave needs and can easily done by looking at the counter values of the core.
+\begin{figure}[H]
+\caption{CPOL = 0 : CPHA = 0}
+\centering
+\includegraphics[width=\textwidth]{img/diagrams/waveform_00_spaced.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{CPOL = 0 : CPHA = 1}
+\centering
+\includegraphics[width=\textwidth]{img/diagrams/waveform_01_spaced.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{CPOL = 1 : CPHA = 0}
+\centering
+\includegraphics[width=\textwidth]{img/diagrams/waveform_10_spaced.png}
+\end{figure}
+
+\begin{figure}[H]
+\caption{CPOL = 1 : CPHA = 1}
+\centering
+\includegraphics[width=\textwidth]{img/diagrams/waveform_11_spaced.png}
+\end{figure}
+
 \section{Building}
 
 \par

@@ -51,10 +51,10 @@
  *
  *   aclk           - Clock for AXIS
  *   arstn          - Negative reset for AXIS
- *   s_axis_tdata   - Input data for UART TX.
+ *   s_axis_tdata   - Input data for SPI MOSI.
  *   s_axis_tvalid  - When set active high the input data is valid
  *   s_axis_tready  - When active high the device is ready for input data.
- *   m_axis_tdata   - Output data from UART RX
+ *   m_axis_tdata   - Output data from SPI MISO
  *   m_axis_tvalid  - When active high the output data is valid
  *   m_axis_tready  - When set active high the output device is ready for data.
  *   sclk           - spi clock, should only drive output pins to devices.

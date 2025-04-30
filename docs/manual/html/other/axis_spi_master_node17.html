@@ -3,7 +3,7 @@
 <!--Converted with LaTeX2HTML 2024 (Released January 1, 2024) -->
 <HTML lang="en">
 <HEAD>
-<TITLE>cocotb</TITLE>
+<TITLE>Simulation</TITLE>
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
 <META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
@@ -11,7 +11,8 @@
 
 <LINK REL="STYLESHEET" HREF="html.css">
 
-<LINK REL="previous" HREF="axis_spi_master_node16.html">
+<LINK REL="next" HREF="axis_spi_master_node20.html">
+<LINK REL="previous" HREF="axis_spi_master_node10.html">
 <LINK REL="next" HREF="axis_spi_master_node18.html">
 </HEAD>
 
@@ -22,63 +23,46 @@
  HREF="axis_spi_master_node18.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="axis_spi_master_node15.html">
+ HREF="html.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="axis_spi_master_node16.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html89"
+<A ID="tex2html98"
   HREF="axis_spi_master_node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="axis_spi_master_node18.html">Module Documentation</A>
+ HREF="axis_spi_master_node18.html">iverilog</A>
 <B> Up:</B> <A
- HREF="axis_spi_master_node15.html">Simulation</A>
+ HREF="html.html">html</A>
 <B> Previous:</B> <A
- HREF="axis_spi_master_node16.html">iverilog</A>
- &nbsp; <B>  <A ID="tex2html90"
+ HREF="axis_spi_master_node16.html">Directory Guide</A>
+ &nbsp; <B>  <A ID="tex2html99"
   HREF="axis_spi_master_node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00052000000000000000">
-cocotb</A>
-</H2>
+<H1><A ID="SECTION00050000000000000000">
+Simulation</A>
+</H1>
 
 <P>
-To use the cocotb tests you must install the following python libraries.
-<TABLE FRAME="VOID" CELLPADDING="4"><TR><TD>
-<PRE>
-  $ pip install cocotb
-  $ pip install cocotbext-axi
-  $ pip install cocotbext-spi
-</PRE>
-</TD></TR></TABLE>
+There are a few different simulations that can be run for this core.
 
 <P>
-Each module has a cocotb based simulation. These use the cocotb extensions made by Alex.
-The two extensions used are cocotbext-axi and cocotbext-spi. These provide outside verification
-of the implimentation. These tests consist of the following fusesoc targets.
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<P>
-
-<UL>
-<LI><SPAN  CLASS="textbf">sim_cocotb</SPAN> Standard simulation of SPI data to and from cocotbexts this tests all CPOL/CPHA options.
-</LI>
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html100"
+  HREF="axis_spi_master_node18.html">iverilog</A>
+<LI><A ID="tex2html101"
+  HREF="axis_spi_master_node19.html">cocotb</A>
 </UL>
-
-<P>
-Then you must use the cocotb sim target. The targets above can be run with the following:
-<TABLE FRAME="VOID" CELLPADDING="4"><TR><TD>
-<PRE>
-  $ fusesoc run --target sim_cocotb AFRL:device_converter:axis_spi:1.0.0
-</PRE>
-</TD></TR></TABLE>
-
-<P>
-<P>
+<!--End of Table of Child-Links-->
 <BR><HR>
 
 </BODY>
