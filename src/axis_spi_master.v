@@ -74,24 +74,24 @@ module axis_spi_master #(
     parameter SELECT_WIDTH  = 8
   ) 
   (
-    input                     aclk,
-    input                     arstn,
-    input  [BUS_WIDTH*8-1:0]  s_axis_tdata,
-    input                     s_axis_tvalid,
-    output                    s_axis_tready,
-    output [BUS_WIDTH*8-1:0]  m_axis_tdata,
-    output                    m_axis_tvalid,
-    input                     m_axis_tready,
-    output                    sclk,
-    output                    mosi,
-    input                     miso,
-    input  [SELECT_WIDTH-1:0] ssn_i,
-    output [SELECT_WIDTH-1:0] ssn_o,
-    input  [31:0]             rate,
-    input                     cpol,
-    input                     cpha,
-    output [BUS_WIDTH*8-1:0]  miso_dcount,
-    output [BUS_WIDTH*8-1:0]  mosi_dcount
+    input  wire                    aclk,
+    input  wire                    arstn,
+    input  wire [BUS_WIDTH*8-1:0]  s_axis_tdata,
+    input  wire                    s_axis_tvalid,
+    output wire                    s_axis_tready,
+    output wire [BUS_WIDTH*8-1:0]  m_axis_tdata,
+    output wire                    m_axis_tvalid,
+    input  wire                    m_axis_tready,
+    output wire                    sclk,
+    output wire                    mosi,
+    input  wire                    miso,
+    input  wire [SELECT_WIDTH-1:0] ssn_i,
+    output wire [SELECT_WIDTH-1:0] ssn_o,
+    input  wire [31:0]             rate,
+    input  wire                    cpol,
+    input  wire                    cpha,
+    output wire [BUS_WIDTH*8-1:0]  miso_dcount,
+    output wire [BUS_WIDTH*8-1:0]  mosi_dcount
   );
 
   // Group: State Machine
