@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.1.27)  1 MAY 2025 07:49
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.1.27)  21 MAY 2025 09:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -305,9 +305,9 @@ File: img/AFRL.png Graphic file (type png)
 Package pdftex.def Info: img/AFRL.png  used on input line 123.
 (pdftex.def)             Requested size: 310.49771pt x 67.51028pt.
 
-:tex2html_wrap294:lthtmlCropMarkHeight:=73.51028pt
+:tex2html_wrap298:lthtmlCropMarkHeight:=73.51028pt
 
-:tex2html_wrap294:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
+:tex2html_wrap298:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
 Preview: Tightpage -32890 -32890 32890 32890
 [1 </home/convertinoj/Programming/HDL/fusesoc/ip_pub/device/axis_spi_master/doc
 s/manual/img/AFRL.png>]
@@ -323,9 +323,9 @@ Overfull \hbox (15.0pt too wide) in paragraph at lines 137--138
  []
 
 
-:tex2html_wrap307:lthtmlCropMarkHeight:=76.76979pt
+:tex2html_wrap311:lthtmlCropMarkHeight:=76.76979pt
 
-:tex2html_wrap307:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
+:tex2html_wrap311:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
 [2 </home/convertinoj/Programming/HDL/fusesoc/ip_pub/device/axis_spi_master/doc
 s/manual/img/diagrams/waveform_00_back_to_back.png (PNG copy)>]
 <img/diagrams/waveform_00_spaced.png, id=16, 1759.07187pt x 367.3725pt>
@@ -340,9 +340,9 @@ Overfull \hbox (15.0pt too wide) in paragraph at lines 143--144
  []
 
 
-:tex2html_wrap311:lthtmlCropMarkHeight:=78.04935pt
+:tex2html_wrap315:lthtmlCropMarkHeight:=78.04935pt
 
-:tex2html_wrap311:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
+:tex2html_wrap315:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
 [3 </home/convertinoj/Programming/HDL/fusesoc/ip_pub/device/axis_spi_master/doc
 s/manual/img/diagrams/waveform_00_spaced.png (PNG copy)>]
 <img/diagrams/waveform_01_spaced.png, id=21, 1773.12437pt x 361.85187pt>
@@ -357,9 +357,9 @@ Overfull \hbox (15.0pt too wide) in paragraph at lines 149--150
  []
 
 
-:tex2html_wrap315:lthtmlCropMarkHeight:=76.40346pt
+:tex2html_wrap319:lthtmlCropMarkHeight:=76.40346pt
 
-:tex2html_wrap315:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
+:tex2html_wrap319:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
 [4 </home/convertinoj/Programming/HDL/fusesoc/ip_pub/device/axis_spi_master/doc
 s/manual/img/diagrams/waveform_01_spaced.png (PNG copy)>]
 <img/diagrams/waveform_10_spaced.png, id=26, 1773.62625pt x 362.85562pt>
@@ -374,9 +374,9 @@ Overfull \hbox (15.0pt too wide) in paragraph at lines 155--156
  []
 
 
-:tex2html_wrap319:lthtmlCropMarkHeight:=76.58215pt
+:tex2html_wrap323:lthtmlCropMarkHeight:=76.58215pt
 
-:tex2html_wrap319:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
+:tex2html_wrap323:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
 [5 </home/convertinoj/Programming/HDL/fusesoc/ip_pub/device/axis_spi_master/doc
 s/manual/img/diagrams/waveform_10_spaced.png (PNG copy)>]
 <img/diagrams/waveform_11_spaced.png, id=31, 1762.585pt x 361.35pt>
@@ -391,9 +391,9 @@ Overfull \hbox (15.0pt too wide) in paragraph at lines 161--162
  []
 
 
-:tex2html_wrap323:lthtmlCropMarkHeight:=76.72487pt
+:tex2html_wrap327:lthtmlCropMarkHeight:=76.72487pt
 
-:tex2html_wrap323:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
+:tex2html_wrap327:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
 [6 </home/convertinoj/Programming/HDL/fusesoc/ip_pub/device/axis_spi_master/doc
 s/manual/img/diagrams/waveform_11_spaced.png (PNG copy)>]
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -401,9 +401,9 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 174.
 
-:tex2html_wrap_inline138:lthtmlCropMarkHeight:=6.0pt
+:tex2html_wrap_inline140:lthtmlCropMarkHeight:=6.0pt
 
-:tex2html_wrap_inline138:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
+:tex2html_wrap_inline140:lthtmlCropMarkDepth:=0.0pt:1ex:=4.30554pt
 [7] (./axis_spi_master_images.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1

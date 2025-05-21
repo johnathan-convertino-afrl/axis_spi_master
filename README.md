@@ -5,14 +5,19 @@
 
 ---
 
-   author: Jay Convertino   
+  author: Jay Convertino   
+  
+  date: 2025.04.17
+  
+  details: Interface SPI data at some baud to a axi streaming interface.
+  
+  license: MIT   
    
-   date: 2025.04.17
-   
-   details: Interface SPI data at some baud to a axi streaming interface.
-   
-   license: MIT   
-   
+  Actions:  
+
+  [![Lint Status](../../actions/workflows/lint.yml/badge.svg)](../../actions)  
+  [![Manual Status](../../actions/workflows/manual.yml/badge.svg)](../../actions)  
+  
 ---
 
 ### Version
@@ -27,19 +32,6 @@
 
   - [axis_spi_master.pdf](docs/manual/axis_spi_master.pdf)
   - [github page](https://johnathan-convertino-afrl.github.io/axis_spi_master/)
-
-### DEPENDENCIES
-#### Build
-  - AFRL:utility:helper:1.0.0
-  - AFRL:simple:piso:1.0.0
-  - AFRL:simple:sipo:1.0.0
-  
-#### Simulation
-
-  - AFRL:simulation:axis_stimulator
-  - cocotb
-  - cocotbext-axi
-  - cocotbext-spi
 
 ### PARAMETERS
 
@@ -67,6 +59,7 @@
 
 * RUN WITH: (fusesoc run --target=sim VENDER:CORE:NAME:VERSION)
   - default (for IP integration builds)
+  - lint
   - sim
   - sim_rand_data
   - sim_rand_ready_rand_data

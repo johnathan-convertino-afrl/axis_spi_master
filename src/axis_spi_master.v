@@ -6,7 +6,7 @@
 // date:    2025/04/22
 //
 // about:   Brief
-// Stream SPI input/output data over AXIS bus.
+// Stream SPI input/output data over AXIS bus in master mode.
 //
 // license: License MIT
 // Copyright 2025 Jay Convertino
