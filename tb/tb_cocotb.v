@@ -89,8 +89,8 @@ module tb_cocotb #(
     input  [31:0]             rate,
     input                     cpol,
     input                     cpha,
-    output [BUS_WIDTH*8-1:0]  miso_dcount,
-    output [BUS_WIDTH*8-1:0]  mosi_dcount
+    output [ 7:0]             miso_dcount,
+    output [ 7:0]             mosi_dcount
   );
 
   // wire loop;

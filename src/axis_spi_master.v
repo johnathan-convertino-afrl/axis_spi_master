@@ -90,8 +90,8 @@ module axis_spi_master #(
     input  wire [31:0]             rate,
     input  wire                    cpol,
     input  wire                    cpha,
-    output wire [BUS_WIDTH*8-1:0]  miso_dcount,
-    output wire [BUS_WIDTH*8-1:0]  mosi_dcount
+    output wire [ 7:0]             miso_dcount,
+    output wire [ 7:0]             mosi_dcount
   );
 
   // Group: State Machine
@@ -120,8 +120,8 @@ module axis_spi_master #(
 
   wire move_to_process;
 
-  wire [BUS_WIDTH*8-1:0]  spi_mosi_dcount;
-  wire [BUS_WIDTH*8-1:0]  spi_miso_dcount;
+  wire [7:0]  spi_mosi_dcount;
+  wire [7:0]  spi_miso_dcount;
 
   wire [BUS_WIDTH*8-1:0]  miso_pdata;
 
@@ -215,6 +215,7 @@ module axis_spi_master #(
     .rev(1'b0),
     .load(spi_mosi_load),
     .pdata(s_axis_tdata),
+    .reg_count_amount(0),
     .sdata(spi_mosi),
     .dcount(spi_mosi_dcount)
   );
@@ -233,6 +234,7 @@ module axis_spi_master #(
     .rev(1'b0),
     .load(spi_miso_load),
     .pdata(miso_pdata),
+    .reg_count_amount(0),
     .sdata(miso),
     .dcount(spi_miso_dcount)
   );
