@@ -105,7 +105,7 @@ module axis_spi_master #(
   localparam processing = 3'd3;
   // var: error
   // someone made a whoops
-  localparam error      = 3'd0;
+  localparam error      = 3'd2;
   
   // wires
   wire spi_ena_mosi;
