@@ -1,5 +1,6 @@
 # AXIS SPI MASTER
 ### SPI Master Only TO AXIS with CPOL/CPHA and rate selection.
+---
 
 ![image](docs/manual/img/AFRL.png)
 

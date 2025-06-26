@@ -133,7 +133,7 @@ module axis_spi_master #(
   reg [BUS_WIDTH*8-1:0] r_m_axis_tdata;
   reg                   r_m_axis_tvalid;
 
-  reg [1:0] data_state = error;
+  reg [1:0] data_state;
 
   // spi clock generated from mod counters. Should only be used for output pins.
   assign sclk = r_clk_o;
