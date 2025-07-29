@@ -119,7 +119,7 @@ parameters:
 
   RATE:
     datatype    : int
-    default     : 115200
+    default     : 5000000
     description : data rate
     paramtype   : vlogparam
 

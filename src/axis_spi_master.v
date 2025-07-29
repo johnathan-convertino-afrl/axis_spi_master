@@ -195,7 +195,7 @@ module axis_spi_master #(
     .rstn(arstn),
     .start0(1'b1),
     .clr(spi_ena_clr),
-    .hold(1'b0),
+    .hold(spi_miso_load),
     .rate(rate),
     .ena(spi_ena_miso)
   );
