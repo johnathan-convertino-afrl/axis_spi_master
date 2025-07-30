@@ -126,6 +126,8 @@ module axis_spi_master #(
   wire [BUS_WIDTH*8-1:0]  miso_pdata;
 
   // registers
+  reg r_spi_ena_miso;
+  
   reg r_clk_o;
 
   reg r_ssn;
@@ -230,7 +232,7 @@ module axis_spi_master #(
   ) inst_sipo (
     .clk(aclk),
     .rstn(arstn),
-    .ena(spi_ena_miso),
+    .ena(r_spi_ena_miso),
     .rev(1'b0),
     .load(spi_miso_load),
     .pdata(miso_pdata),
@@ -238,6 +240,19 @@ module axis_spi_master #(
     .sdata(miso),
     .dcount(spi_miso_dcount)
   );
+  
+  /*
+   * register spi_ena_miso to be a clock cycle behind to line up sipo with rising edge sample
+   */
+  always @(posedge aclk)
+  begin
+    if(arstn == 1'b0)
+    begin
+      r_spi_ena_miso <= 1'b0;
+    end else begin
+      r_spi_ena_miso <= spi_ena_miso;
+    end
+  end
 
   /*
    * register input data from SIPO for release only when load is activated.
