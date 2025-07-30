@@ -149,12 +149,12 @@ module axis_spi_master #(
   assign m_axis_tvalid = r_m_axis_tvalid;
 
   // data is valid when the serial input counter has hit full
-  assign spi_miso_load = (spi_miso_dcount == BUS_WIDTH*8 && spi_ena_miso == 1'b1 ? 1'b1 : 1'b0);
+  assign spi_miso_load = (spi_miso_dcount == BUS_WIDTH*8 && r_spi_ena_miso == 1'b1 ? 1'b1 : 1'b0);
 
   // we hold if the output counter is zero.
-  assign spi_mosi_load = (spi_mosi_dcount == 0 && (spi_ena_miso == 1'b1 || spi_miso_dcount == 0) ? 1'b1 : 1'b0) & s_axis_tvalid;
+  assign spi_mosi_load = (spi_mosi_dcount == 0 && (spi_ena_mosi == 1'b1 || spi_miso_dcount == 0) ? 1'b1 : 1'b0) & s_axis_tvalid;
 
-  assign spi_ena_clr = (spi_mosi_dcount == 0 && spi_miso_dcount == 0 ? 1'b1 : spi_miso_load);
+  assign spi_ena_clr = (spi_mosi_dcount == 0 && spi_miso_dcount == 0 ? 1'b1 : spi_miso_load) & r_ssn;
 
   // select device if we are not holding (hold is used to show we are ready for a beat, but if there is valid data we mask it to gain a clock cycle).
   assign ssn_o = ssn_i | {SELECT_WIDTH{r_ssn}};
@@ -346,7 +346,7 @@ module axis_spi_master #(
             r_clk_o <= (cpol ? cpha : ~cpha);
           end
 
-          if(spi_mosi_dcount == 0 && spi_miso_load == 1'b1)
+          if(spi_mosi_dcount == 0 && spi_miso_dcount == BUS_WIDTH*8)
           begin
             r_clk_o <= cpol;
           end
