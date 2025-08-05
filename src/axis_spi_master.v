@@ -309,8 +309,6 @@ module axis_spi_master #(
 
           if(spi_mosi_dcount == 0 && spi_ena_mosi == 1'b1)
           begin
-            r_ssn <= 1'b1;
-
             data_state <= ready;
           end
         end
