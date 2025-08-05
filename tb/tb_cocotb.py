@@ -69,6 +69,77 @@ async def reset_dut(dut):
   await Timer(1000, units="ns")
   dut.arstn.value = 1
 
+# Function: stream_ff_word_00
+# Coroutine that is identified as a test routine. This routine tests for writing a single word, and
+# then reading a single word for cpol == 0 and cpha == 0.
+#
+# Parameters:
+#   dut - Device under test passed from cocotb.
+@cocotb.test()
+async def stream_ff_word_00(dut):
+
+    recv = []
+    send = []
+
+    dut.rate.value = int(dut.RATE.value)
+
+    spi_bus = SpiBus.from_entity(dut, cs_name="ssn_o")
+
+    spi_config = SpiConfig(
+        word_width=int(dut.BUS_WIDTH.value*8),
+        sclk_freq=int(dut.RATE.value),
+        cpol=False,
+        cpha=False,
+        msb_first=True,
+        data_output_idle=0,
+        frame_spacing_ns=0,
+        ignore_rx_value=None,
+        cs_active_low=True,
+    )
+
+    dut.ssn_i.value = 0
+
+    dut.cpol.value = 0
+
+    dut.cpha.value = 0
+
+    start_clock(dut)
+
+    await reset_dut(dut)
+
+    axis_source = AxiStreamSource(AxiStreamBus.from_prefix(dut, "s_axis"), dut.aclk, dut.arstn, False)
+    axis_sink = AxiStreamSink(AxiStreamBus.from_prefix(dut, "m_axis"), dut.aclk, dut.arstn, False)
+
+    spi_loop = SpiSlaveLoopback(spi_bus, spi_config)
+
+    for x in range(0, 256):
+      data = int(0xFE).to_bytes(length = 1, byteorder='little') * int(dut.BUS_WIDTH.value)
+      tx_frame = AxiStreamFrame(data, tx_complete=Event())
+
+      send.append(tx_frame)
+
+      await axis_source.send(tx_frame)
+      await tx_frame.tx_complete.wait()
+      
+      # await Timer(100, units="us")
+
+    #   recv.append(await axis_sink.recv())
+    # 
+    # #flush and last word out of spi echo slave
+    # data = int(0).to_bytes(length = 1, byteorder='little') * int(dut.BUS_WIDTH.value)
+    # tx_frame = AxiStreamFrame(data, tx_complete=Event())
+    # 
+    # await axis_source.send(tx_frame)
+    # await tx_frame.tx_complete.wait()
+    # 
+    # recv.append(await axis_sink.recv())
+    # 
+    # #remove first element as its the contents of the SPI core at reset, NOT a valid echo value.
+    # recv.pop(0)
+    # 
+    # for r, s in zip(recv, send):
+      # assert r.tdata == s.tdata, "DATA SENT DOES NOT EQUAL DATA RECEIVED"
+
 # Function: single_word_00
 # Coroutine that is identified as a test routine. This routine tests for writing a single word, and
 # then reading a single word for cpol == 0 and cpha == 0.

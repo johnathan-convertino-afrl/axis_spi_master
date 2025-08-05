@@ -8,6 +8,10 @@ filesets:
     files:
       - src/axis_spi_master.v
     file_type: verilogSource
+    
+  constr:
+    files:
+      - "tool_vivado  ? (constr/axis_spi_master_constr.tcl)" : {file_type: SDC}
   
   tb:
     files:
@@ -35,7 +39,7 @@ filesets:
 targets:
   default: &default
     description: Default for IP intergration.
-    filesets: [src, dep]
+    filesets: [src, constr, dep]
     
   lint:
     description: Lint with Verible
@@ -91,8 +95,15 @@ targets:
     parameters:
       - CLOCK_SPEED
       - RATE
+      - BUS_WIDTH
 
 parameters:
+  BUS_WIDTH:
+    datatype    : int
+    default     : 0
+    description : Number of bytes for the AXIS bus, this is also the number per word for SPI
+    paramtype   : vlogparam
+    
   RAND_READY:
     datatype    : int
     default     : 0
