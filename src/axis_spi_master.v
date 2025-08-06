@@ -142,7 +142,7 @@ module axis_spi_master #(
   reg [1:0] data_state;
 
   // spi clock generated from mod counters. Should only be used for output pins.
-  assign sclk = r_clk_o;
+  assign sclk = ((cpol & cpha) && spi_mosi_dcount == 0  && spi_miso_dcount == BUS_WIDTH*8 ? cpol : r_clk_o);
 
   // we are not ready when holding the clock gens and in reset
   assign s_axis_tready = (data_state == ready ? 1'b1 : spi_mosi_load) & arstn;
@@ -153,7 +153,7 @@ module axis_spi_master #(
   assign m_axis_tvalid = r_m_axis_tvalid;
 
   // data is valid when the serial input counter has hit full
-  assign spi_miso_load = (spi_miso_dcount == BUS_WIDTH*8 ? spi_ena_mosi : 1'b0);
+  assign spi_miso_load = (spi_miso_dcount == BUS_WIDTH*8 ? (cpha ? r_spi_ena_miso : spi_ena_miso) : 1'b0);
 
   // we hold if the output counter is zero.
   assign spi_mosi_load = (spi_mosi_dcount == 0 ? 1'b1 : 1'b0) & s_axis_tvalid;
@@ -167,7 +167,7 @@ module axis_spi_master #(
 
   assign move_to_process = spi_mosi_load;
   
-  assign move_to_ready = (spi_miso_dcount == (cpha ? BUS_WIDTH*8 : 0) && (cpha ? spi_ena_mosi : spi_ena_miso) && spi_mosi_dcount == 0);
+  assign move_to_ready = (spi_miso_load && spi_mosi_dcount == 0);
 
   assign miso_dcount = spi_miso_dcount;
 
@@ -308,12 +308,17 @@ module axis_spi_master #(
           if(move_to_process)
           begin
             data_state <= processing;
-            r_ssn      <= ~cpha;
+            r_ssn      <= ~cpha | cpol;
           end
         end
         processing:
         begin
           data_state <= processing;
+          
+          if(cpha & cpol)
+          begin
+            r_ssn <= 1'b0;
+          end
           
           if(spi_ena_mosi == 1'b1)
           begin
@@ -323,6 +328,7 @@ module axis_spi_master #(
           if(move_to_ready)
           begin
             data_state <= ready;
+            r_ssn <= (cpol == 1'b0 ? ~cpha : 1'b1);
           end
         end
         default:
