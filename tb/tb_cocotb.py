@@ -83,25 +83,27 @@ async def stream_ff_word_00(dut):
 
     dut.rate.value = int(dut.RATE.value)
 
-    spi_bus = SpiBus.from_entity(dut, cs_name="ssn_o")
-
-    spi_config = SpiConfig(
-        word_width=int(dut.BUS_WIDTH.value*8),
-        sclk_freq=int(dut.RATE.value),
-        cpol=False,
-        cpha=False,
-        msb_first=True,
-        data_output_idle=0,
-        frame_spacing_ns=0,
-        ignore_rx_value=None,
-        cs_active_low=True,
-    )
+    # spi_bus = SpiBus.from_entity(dut, cs_name="ssn_o")
+    # 
+    # spi_config = SpiConfig(
+    #     word_width=int(dut.BUS_WIDTH.value*8),
+    #     sclk_freq=int(dut.RATE.value),
+    #     cpol=False,
+    #     cpha=False,
+    #     msb_first=True,
+    #     data_output_idle=0,
+    #     frame_spacing_ns=0,
+    #     ignore_rx_value=None,
+    #     cs_active_low=True,
+    # )
 
     dut.ssn_i.value = 0
 
     dut.cpol.value = 0
 
     dut.cpha.value = 0
+    
+    dut.miso.value = 0
 
     start_clock(dut)
 
@@ -110,9 +112,9 @@ async def stream_ff_word_00(dut):
     axis_source = AxiStreamSource(AxiStreamBus.from_prefix(dut, "s_axis"), dut.aclk, dut.arstn, False)
     axis_sink = AxiStreamSink(AxiStreamBus.from_prefix(dut, "m_axis"), dut.aclk, dut.arstn, False)
 
-    spi_loop = SpiSlaveLoopback(spi_bus, spi_config)
+    # spi_loop = SpiSlaveLoopback(spi_bus, spi_config)
 
-    for x in range(0, 256):
+    for x in range(0, 10):
       data = int(0xFE).to_bytes(length = 1, byteorder='little') * int(dut.BUS_WIDTH.value)
       tx_frame = AxiStreamFrame(data, tx_complete=Event())
 
@@ -122,6 +124,9 @@ async def stream_ff_word_00(dut):
       await tx_frame.tx_complete.wait()
       
       # await Timer(100, units="us")
+      
+    
+    await Timer(100, units="us")
 
     #   recv.append(await axis_sink.recv())
     # 
@@ -192,6 +197,8 @@ async def single_word_00(dut):
       await tx_frame.tx_complete.wait()
 
       recv.append(await axis_sink.recv())
+      
+      await Timer(int(1000000000/dut.RATE.value)*2, units="ns")
 
     #flush and last word out of spi echo slave
     data = int(0).to_bytes(length = 1, byteorder='little') * int(dut.BUS_WIDTH.value)
@@ -260,6 +267,8 @@ async def single_word_10(dut):
       await tx_frame.tx_complete.wait()
 
       recv.append(await axis_sink.recv())
+      
+      await Timer(int(1000000000/dut.RATE.value)*2, units="ns")
 
     #flush and last word out of spi echo slave
     data = int(0).to_bytes(length = 1, byteorder='little') * int(dut.BUS_WIDTH.value)
@@ -328,6 +337,8 @@ async def single_word_01(dut):
       await tx_frame.tx_complete.wait()
 
       recv.append(await axis_sink.recv())
+      
+      await Timer(int(1000000000/dut.RATE.value)*2, units="ns")
 
     #flush and last word out of spi echo slave
     data = int(0).to_bytes(length = 1, byteorder='little') * int(dut.BUS_WIDTH.value)
@@ -396,6 +407,8 @@ async def single_word_11(dut):
       await tx_frame.tx_complete.wait()
 
       recv.append(await axis_sink.recv())
+      
+      await Timer(int(1000000000/dut.RATE.value)*2, units="ns")
 
     #flush and last word out of spi echo slave
     data = int(0).to_bytes(length = 1, byteorder='little') * int(dut.BUS_WIDTH.value)

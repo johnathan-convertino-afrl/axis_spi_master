@@ -117,8 +117,12 @@ module axis_spi_master #(
   wire spi_ena_clr;
 
   wire spi_mosi;
+  
+  wire move_to_ready;
 
   wire move_to_process;
+  
+  wire disable_enable;
 
   wire [7:0]  spi_mosi_dcount;
   wire [7:0]  spi_miso_dcount;
@@ -141,7 +145,7 @@ module axis_spi_master #(
   assign sclk = r_clk_o;
 
   // we are not ready when holding the clock gens and in reset
-  assign s_axis_tready = (spi_mosi_dcount == 0 && r_ssn == 1'b1 ? 1'b1 : spi_mosi_load) & arstn;
+  assign s_axis_tready = (data_state == ready ? 1'b1 : spi_mosi_load) & arstn;
 
   // data is valid when the serial input counter has hit full
   assign m_axis_tdata = r_m_axis_tdata;
@@ -149,23 +153,27 @@ module axis_spi_master #(
   assign m_axis_tvalid = r_m_axis_tvalid;
 
   // data is valid when the serial input counter has hit full
-  assign spi_miso_load = (spi_miso_dcount == BUS_WIDTH*8 ? 1'b1 : 1'b0);
+  assign spi_miso_load = (spi_miso_dcount == BUS_WIDTH*8 ? spi_ena_mosi : 1'b0);
 
   // we hold if the output counter is zero.
   assign spi_mosi_load = (spi_mosi_dcount == 0 ? 1'b1 : 1'b0) & s_axis_tvalid;
 
-  assign spi_ena_clr = (spi_mosi_dcount == 0 && spi_miso_dcount == 0 ? 1'b1 : spi_miso_load) & r_ssn;
+  assign spi_ena_clr = (data_state != processing ? 1'b1 : 1'b0);
 
   // select device if we are not holding (hold is used to show we are ready for a beat, but if there is valid data we mask it to gain a clock cycle).
   assign ssn_o = ssn_i | {SELECT_WIDTH{r_ssn}};
 
   assign mosi = spi_mosi;
 
-  assign move_to_process = (cpha == 1'b1 ? spi_mosi_load : spi_ena_mosi);
+  assign move_to_process = spi_mosi_load;
+  
+  assign move_to_ready = (spi_miso_dcount == (cpha ? BUS_WIDTH*8 : 0) && (cpha ? spi_ena_mosi : spi_ena_miso) && spi_mosi_dcount == 0);
 
   assign miso_dcount = spi_miso_dcount;
 
   assign mosi_dcount = spi_mosi_dcount;
+  
+  assign disable_enable = (spi_mosi_dcount == 0 && spi_miso_dcount == 0);
 
   //Group: Instantiated Modules
   /*
@@ -213,7 +221,7 @@ module axis_spi_master #(
   ) inst_piso (
     .clk(aclk),
     .rstn(arstn),
-    .ena(spi_ena_mosi),
+    .ena(disable_enable ? 1'b0 : spi_ena_mosi),
     .rev(1'b0),
     .load(spi_mosi_load),
     .pdata(s_axis_tdata),
@@ -232,7 +240,7 @@ module axis_spi_master #(
   ) inst_sipo (
     .clk(aclk),
     .rstn(arstn),
-    .ena(r_spi_ena_miso),
+    .ena(disable_enable ? 1'b0 : (cpol ^ cpha ? spi_ena_miso : r_spi_ena_miso)),
     .rev(1'b0),
     .load(spi_miso_load),
     .pdata(miso_pdata),
@@ -250,7 +258,7 @@ module axis_spi_master #(
     begin
       r_spi_ena_miso <= 1'b0;
     end else begin
-      r_spi_ena_miso <= spi_ena_miso & ~spi_ena_clr;
+      r_spi_ena_miso <= spi_ena_miso;
     end
   end
 
@@ -294,20 +302,25 @@ module axis_spi_master #(
         ready:
         begin
           data_state <= ready;
+          
           r_ssn <= 1'b1;
 
-          if(move_to_process == 1'b1)
+          if(move_to_process)
           begin
-            r_ssn <= 1'b0;
             data_state <= processing;
+            r_ssn      <= ~cpha;
           end
         end
         processing:
         begin
           data_state <= processing;
-          r_ssn <= 1'b0;
+          
+          if(spi_ena_mosi == 1'b1)
+          begin
+            r_ssn <= 1'b0;
+          end
 
-          if(spi_mosi_dcount == 0 && spi_ena_mosi == 1'b1)
+          if(move_to_ready)
           begin
             data_state <= ready;
           end
@@ -344,7 +357,7 @@ module axis_spi_master #(
             r_clk_o <= (cpol ? cpha : ~cpha);
           end
 
-          if(spi_mosi_dcount == 0 && spi_ena_mosi == 1'b1)
+          if(move_to_ready)
           begin
             r_clk_o <= cpol;
           end
@@ -352,11 +365,6 @@ module axis_spi_master #(
         default:
         begin
           r_clk_o <= cpol;
-
-          if(cpha == 1'b1 && spi_ena_mosi == 1'b1)
-          begin
-            r_clk_o <= (cpol ? ~cpha : cpha);
-          end
         end
       endcase
     end
