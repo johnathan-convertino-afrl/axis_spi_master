@@ -139,7 +139,8 @@ module axis_spi_master #(
   reg [BUS_WIDTH*8-1:0] r_m_axis_tdata;
   reg                   r_m_axis_tvalid;
 
-  reg [1:0] data_state;
+  reg [ 1:0]           data_state;
+  reg [31:0]           r_rate;
 
   // spi clock generated from mod counters. Should only be used for output pins.
   assign sclk = ((cpol & cpha) && spi_mosi_dcount == 0  && spi_miso_dcount == BUS_WIDTH*8 ? cpol : r_clk_o);
@@ -189,7 +190,7 @@ module axis_spi_master #(
     .start0(1'b0),
     .clr(spi_ena_clr),
     .hold(1'b0),
-    .rate(rate),
+    .rate(r_rate),
     .ena(spi_ena_mosi)
   );
 
@@ -206,7 +207,7 @@ module axis_spi_master #(
     .start0(1'b1),
     .clr(spi_ena_clr),
     .hold(1'b0),
-    .rate(rate),
+    .rate(r_rate),
     .ena(spi_ena_miso)
   );
 
@@ -293,10 +294,12 @@ module axis_spi_master #(
   begin
     if(arstn == 1'b0)
     begin
-      r_ssn <= 1'b1;
-      data_state <= ready;
+      r_ssn       <= 1'b1;
+      r_rate      <= rate;
+      data_state  <= ready;
     end else begin
-      r_ssn <= r_ssn;
+      r_ssn   <= r_ssn;
+      r_rate  <= r_rate;
 
       case(data_state)
         ready:
@@ -307,6 +310,7 @@ module axis_spi_master #(
 
           if(move_to_process)
           begin
+            r_rate     <= rate;
             data_state <= processing;
             r_ssn      <= 1'b0;
           end
