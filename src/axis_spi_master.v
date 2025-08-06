@@ -308,17 +308,12 @@ module axis_spi_master #(
           if(move_to_process)
           begin
             data_state <= processing;
-            r_ssn      <= ~cpha | cpol;
+            r_ssn      <= 1'b0;
           end
         end
         processing:
         begin
           data_state <= processing;
-          
-          if(cpha & cpol)
-          begin
-            r_ssn <= 1'b0;
-          end
           
           if(spi_ena_mosi == 1'b1)
           begin
