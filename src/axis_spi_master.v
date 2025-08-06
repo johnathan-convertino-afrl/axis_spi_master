@@ -141,9 +141,11 @@ module axis_spi_master #(
 
   reg [ 1:0]           data_state;
   reg [31:0]           r_rate;
+  reg                  r_cpol;
+  reg                  r_cpha;
 
-  // spi clock generated from mod counters. Should only be used for output pins.
-  assign sclk = ((cpol & cpha) && spi_mosi_dcount == 0  && spi_miso_dcount == BUS_WIDTH*8 ? cpol : r_clk_o);
+  // spi clock generated from mod counters. Should only be used for output pins. When cpol and pha are 1 we jam out a clock cycle when done and no back to back transmissions.
+  assign sclk = ((r_cpol & r_cpha) && spi_mosi_dcount == 0  && spi_miso_dcount == BUS_WIDTH*8 ? r_cpol : r_clk_o);
 
   // we are not ready when holding the clock gens and in reset
   assign s_axis_tready = (data_state == ready ? 1'b1 : spi_mosi_load) & arstn;
@@ -154,7 +156,7 @@ module axis_spi_master #(
   assign m_axis_tvalid = r_m_axis_tvalid;
 
   // data is valid when the serial input counter has hit full
-  assign spi_miso_load = (spi_miso_dcount == BUS_WIDTH*8 ? (cpha ? r_spi_ena_miso : spi_ena_miso) : 1'b0);
+  assign spi_miso_load = (spi_miso_dcount == BUS_WIDTH*8 ? (r_cpha ? r_spi_ena_miso : spi_ena_miso) : 1'b0);
 
   // we hold if the output counter is zero.
   assign spi_mosi_load = (spi_mosi_dcount == 0 ? 1'b1 : 1'b0) & s_axis_tvalid;
@@ -296,6 +298,8 @@ module axis_spi_master #(
     begin
       r_ssn       <= 1'b1;
       r_rate      <= rate;
+      r_cpha      <= cpha;
+      r_cpol      <= cpol;
       data_state  <= ready;
     end else begin
       r_ssn   <= r_ssn;
@@ -307,6 +311,9 @@ module axis_spi_master #(
           data_state <= ready;
           
           r_ssn <= 1'b1;
+          
+          r_cpha <= cpha;
+          r_cpol <= cpol;
 
           if(move_to_process)
           begin
@@ -327,7 +334,8 @@ module axis_spi_master #(
           if(move_to_ready)
           begin
             data_state <= ready;
-            r_ssn <= (cpol == 1'b0 ? ~cpha : 1'b1);
+            //fix for different combinations of phase and polarity need r_ssn to change at different times.
+            r_ssn <= (r_cpol == 1'b0 ? ~r_cpha : 1'b1);
           end
         end
         default:
@@ -354,22 +362,22 @@ module axis_spi_master #(
 
           if(spi_ena_mosi == 1'b1)
           begin
-            r_clk_o <= (cpol ? ~cpha : cpha);
+            r_clk_o <= (r_cpol ? ~r_cpha : r_cpha);
           end
 
           if(spi_ena_miso == 1'b1)
           begin
-            r_clk_o <= (cpol ? cpha : ~cpha);
+            r_clk_o <= (r_cpol ? r_cpha : ~r_cpha);
           end
 
           if(move_to_ready)
           begin
-            r_clk_o <= cpol;
+            r_clk_o <= r_cpol;
           end
         end
         default:
         begin
-          r_clk_o <= cpol;
+          r_clk_o <= r_cpol;
         end
       endcase
     end
