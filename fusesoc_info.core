@@ -39,7 +39,7 @@ filesets:
 targets:
   default: &default
     description: Default for IP intergration.
-    filesets: [src, constr, dep]
+    filesets: [src, dep, constr]
     
   lint:
     description: Lint with Verible
