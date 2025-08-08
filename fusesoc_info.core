@@ -100,7 +100,7 @@ targets:
 parameters:
   BUS_WIDTH:
     datatype    : int
-    default     : 0
+    default     : 1
     description : Number of bytes for the AXIS bus, this is also the number per word for SPI
     paramtype   : vlogparam
     

@@ -220,7 +220,8 @@ module axis_spi_master #(
    */
 
   piso #(
-    .BUS_WIDTH(BUS_WIDTH)
+    .BUS_WIDTH(BUS_WIDTH),
+    .KEEP_LAST(1)
   ) inst_piso (
     .clk(aclk),
     .rstn(arstn),
