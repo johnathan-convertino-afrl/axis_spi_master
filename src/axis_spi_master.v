@@ -315,10 +315,11 @@ module axis_spi_master #(
           
           r_cpha <= cpha;
           r_cpol <= cpol;
+          
+          r_rate <= rate;
 
           if(move_to_process)
           begin
-            r_rate     <= rate;
             data_state <= processing;
             r_ssn      <= 1'b0;
           end
