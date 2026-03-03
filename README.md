@@ -23,10 +23,10 @@
 
 ### Version
 #### Current
-  - V1.0.0 - initial release
+  - V2.0.0 - Major changes to the clock generation methods. Using a PISO is the way.
 
 #### Previous
-  - none
+  - V1.0.0 - initial release
 
 ### DOCUMENTATION
   For detailed usage information, please navigate to one of the following sources. They are the same, just in a different format.

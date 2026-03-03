@@ -123,16 +123,23 @@ module axis_spi_master #(
   wire move_to_process;
   
   wire disable_enable;
+  
+  wire reload_clk;
+  
+  wire ena_clk;
+  
+  wire w_sclk;
+  
+  wire w_spi_clk_load;
 
   wire [7:0]  spi_mosi_dcount;
   wire [7:0]  spi_miso_dcount;
+  wire [7:0]  spi_clk_dcount;
 
   wire [BUS_WIDTH*8-1:0]  miso_pdata;
 
   // registers
   reg r_spi_ena_miso;
-  
-  reg r_clk_o;
 
   reg r_ssn;
 
@@ -143,9 +150,9 @@ module axis_spi_master #(
   reg [31:0]           r_rate;
   reg                  r_cpol;
   reg                  r_cpha;
-
-  // spi clock generated from mod counters. Should only be used for output pins. When cpol and pha are 1 we jam out a clock cycle when done and no back to back transmissions.
-  assign sclk = ((r_cpol & r_cpha) && spi_mosi_dcount == 0  && spi_miso_dcount == BUS_WIDTH*8 ? r_cpol : r_clk_o);
+  
+  // spi clock generated from PISO core. Polarity is just an inversion of the clock in relation to the data.
+  assign sclk = (r_cpol ? ~w_sclk : w_sclk);
 
   // we are not ready when holding the clock gens and in reset
   assign s_axis_tready = (data_state == ready ? 1'b1 : spi_mosi_load) & arstn;
@@ -177,12 +184,15 @@ module axis_spi_master #(
   assign mosi_dcount = spi_mosi_dcount;
   
   assign disable_enable = (spi_mosi_dcount == 0 && spi_miso_dcount == 0);
+  
+  // when mosi count is 0 set reload_clk high to reload synth clock.
+  // | (spi_mosi_dcount == 0);
 
   //Group: Instantiated Modules
   /*
   * Module: inst_spi_output_clk
   *
-  * Generates enable at rate for spi output data.
+  * Generates enable at rate for spi output data.synth_clk
   */
   mod_clock_ena_gen #(
     .CLOCK_SPEED(CLOCK_SPEED)
@@ -218,7 +228,6 @@ module axis_spi_master #(
    *
    * take axis input parallel data at bus size, and output the word to the spi bus.
    */
-
   piso #(
     .BUS_WIDTH(BUS_WIDTH),
     .KEEP_LAST(1)
@@ -254,6 +263,28 @@ module axis_spi_master #(
   );
   
   /*
+   * Module: inst_clk_gen
+   *
+   * Use a synthetic clock of bits into PDATA to generate a output clock.
+   */
+  piso #(
+    .BUS_WIDTH(BUS_WIDTH*2),
+    .DEFAULT_RESET_VAL(0),
+    .DEFAULT_SHIFT_VAL(0),
+    .KEEP_LAST(0)
+  ) inst_clk_gen (
+    .clk(aclk),
+    .rstn(arstn),
+    .ena(spi_ena_mosi | spi_ena_miso),
+    .rev(r_cpha),
+    .load(spi_mosi_load),
+    .pdata({BUS_WIDTH*2{8'h55}}),
+    .reg_count_amount(0),
+    .sdata(w_sclk),
+    .dcount(spi_clk_dcount)
+  );
+  
+  /*
    * register spi_ena_miso to be a clock cycle behind to line up sipo with rising edge sample
    */
   always @(posedge aclk)
@@ -266,7 +297,7 @@ module axis_spi_master #(
     end
   end
 
-  /*
+  /*assign reload_clk = (spi_clk_dcount == 0);
    * register input data from SIPO for release only when load is activated.
    */
   always @(posedge aclk)
@@ -317,7 +348,8 @@ module axis_spi_master #(
           r_cpol <= cpol;
           
           r_rate <= rate;
-
+          
+          
           if(move_to_process)
           begin
             data_state <= processing;
@@ -343,43 +375,6 @@ module axis_spi_master #(
         default:
         begin
           data_state <= ready;
-        end
-      endcase
-    end
-  end
-
-  /*
-   * Generate a 50% duty cycle clock based on mod_clock gen enables that are offset to the positive edge and negative edge of the rate clock.
-   */
-  always @(posedge aclk)
-  begin
-    if(arstn == 1'b0)
-    begin
-      r_clk_o <= cpol;
-    end else begin
-      case(data_state)
-        processing:
-        begin
-          r_clk_o <= r_clk_o;
-
-          if(spi_ena_mosi == 1'b1)
-          begin
-            r_clk_o <= (r_cpol ? ~r_cpha : r_cpha);
-          end
-
-          if(spi_ena_miso == 1'b1)
-          begin
-            r_clk_o <= (r_cpol ? r_cpha : ~r_cpha);
-          end
-
-          if(move_to_ready)
-          begin
-            r_clk_o <= r_cpol;
-          end
-        end
-        default:
-        begin
-          r_clk_o <= r_cpol;
         end
       endcase
     end
