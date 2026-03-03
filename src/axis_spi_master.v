@@ -122,19 +122,8 @@ module axis_spi_master #(
 
   wire move_to_process;
   
-  wire disable_enable;
-  
-  wire reload_clk;
-  
-  wire ena_clk;
-  
-  wire w_sclk;
-  
-  wire w_spi_clk_load;
-
   wire [7:0]  spi_mosi_dcount;
   wire [7:0]  spi_miso_dcount;
-  wire [7:0]  spi_clk_dcount;
 
   wire [BUS_WIDTH*8-1:0]  miso_pdata;
 
@@ -142,6 +131,8 @@ module axis_spi_master #(
   reg r_spi_ena_miso;
 
   reg r_ssn;
+  
+  reg r_clk_o;
 
   reg [BUS_WIDTH*8-1:0] r_m_axis_tdata;
   reg                   r_m_axis_tvalid;
@@ -152,7 +143,7 @@ module axis_spi_master #(
   reg                  r_cpha;
   
   // spi clock generated from PISO core. Polarity is just an inversion of the clock in relation to the data.
-  assign sclk = (r_cpol ? ~w_sclk : w_sclk);
+  assign sclk = (r_cpol ? ~r_clk_o : r_clk_o);
 
   // we are not ready when holding the clock gens and in reset
   assign s_axis_tready = (data_state == ready ? 1'b1 : spi_mosi_load) & arstn;
@@ -168,7 +159,8 @@ module axis_spi_master #(
   // we hold if the output counter is zero.
   assign spi_mosi_load = (spi_mosi_dcount == 0 ? 1'b1 : 1'b0) & s_axis_tvalid;
 
-  assign spi_ena_clr = (data_state != processing ? 1'b1 : 1'b0);
+  //only clear when not in processing state, also if ready to leave processing state (move_to_ready).
+  assign spi_ena_clr = (data_state != processing ? 1'b1 : move_to_ready);
 
   // select device if we are not holding (hold is used to show we are ready for a beat, but if there is valid data we mask it to gain a clock cycle).
   assign ssn_o = ssn_i | {SELECT_WIDTH{r_ssn}};
@@ -183,7 +175,7 @@ module axis_spi_master #(
 
   assign mosi_dcount = spi_mosi_dcount;
   
-  assign disable_enable = (spi_mosi_dcount == 0 && spi_miso_dcount == 0);
+  // assign disable_enable = (spi_mosi_dcount == 0 && spi_miso_dcount == 0);
   
   // when mosi count is 0 set reload_clk high to reload synth clock.
   // | (spi_mosi_dcount == 0);
@@ -234,11 +226,11 @@ module axis_spi_master #(
   ) inst_piso (
     .clk(aclk),
     .rstn(arstn),
-    .ena(disable_enable ? 1'b0 : spi_ena_mosi),
+    .ena(spi_ena_mosi),
     .rev(1'b0),
     .load(spi_mosi_load),
     .pdata(s_axis_tdata),
-    .reg_count_amount(0),
+    .reg_count_amount(8'h00),
     .sdata(spi_mosi),
     .dcount(spi_mosi_dcount)
   );
@@ -253,36 +245,15 @@ module axis_spi_master #(
   ) inst_sipo (
     .clk(aclk),
     .rstn(arstn),
-    .ena(disable_enable ? 1'b0 : (cpol ^ cpha ? spi_ena_miso : r_spi_ena_miso)),
+    .ena(spi_ena_miso),
     .rev(1'b0),
     .load(spi_miso_load),
     .pdata(miso_pdata),
-    .reg_count_amount(0),
+    .reg_count_amount(8'h00),
     .sdata(miso),
     .dcount(spi_miso_dcount)
   );
   
-  /*
-   * Module: inst_clk_gen
-   *
-   * Use a synthetic clock of bits into PDATA to generate a output clock.
-   */
-  piso #(
-    .BUS_WIDTH(BUS_WIDTH*2),
-    .DEFAULT_RESET_VAL(0),
-    .DEFAULT_SHIFT_VAL(0),
-    .KEEP_LAST(0)
-  ) inst_clk_gen (
-    .clk(aclk),
-    .rstn(arstn),
-    .ena(spi_ena_mosi | spi_ena_miso),
-    .rev(r_cpha),
-    .load(spi_mosi_load),
-    .pdata({BUS_WIDTH*2{8'h55}}),
-    .reg_count_amount(0),
-    .sdata(w_sclk),
-    .dcount(spi_clk_dcount)
-  );
   
   /*
    * register spi_ena_miso to be a clock cycle behind to line up sipo with rising edge sample
@@ -332,6 +303,7 @@ module axis_spi_master #(
       r_rate      <= rate;
       r_cpha      <= cpha;
       r_cpol      <= cpol;
+      r_clk_o     <= 1'b0;
       data_state  <= ready;
     end else begin
       r_ssn   <= r_ssn;
@@ -349,6 +321,7 @@ module axis_spi_master #(
           
           r_rate <= rate;
           
+          r_clk_o <= 1'b0;
           
           if(move_to_process)
           begin
@@ -362,11 +335,22 @@ module axis_spi_master #(
           
           if(spi_ena_mosi == 1'b1)
           begin
+            r_clk_o <= (spi_miso_dcount == BUS_WIDTH*8 ? 1'b0 : r_cpha);
+          end
+            
+          if(spi_ena_miso == 1'b1)
+          begin
+            r_clk_o <=  ~r_cpha;
+          end
+          
+          if(spi_ena_mosi == 1'b1)
+          begin
             r_ssn <= 1'b0;
           end
 
           if(move_to_ready)
           begin
+            r_clk_o <= 1'b0;
             data_state <= ready;
             //fix for different combinations of phase and polarity need r_ssn to change at different times.
             r_ssn <= (r_cpol == 1'b0 ? ~r_cpha : 1'b1);
