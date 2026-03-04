@@ -121,7 +121,7 @@ async def stream_ff_word_00(dut):
       send.append(tx_frame)
 
       await axis_source.send(tx_frame)
-      # await tx_frame.tx_complete.wait()
+      await tx_frame.tx_complete.wait()
       
       # await Timer(100, units="us")
       

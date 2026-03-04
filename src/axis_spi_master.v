@@ -112,7 +112,6 @@ module axis_spi_master #(
   wire spi_ena_miso;
 
   wire spi_mosi_load;
-  wire spi_mosi_hold;
   wire spi_miso_load;
   wire spi_ena_clr;
 
@@ -128,8 +127,6 @@ module axis_spi_master #(
   wire [BUS_WIDTH*8-1:0]  miso_pdata;
 
   // registers
-  reg r_spi_ena_miso;
-
   reg r_ssn;
   
   reg r_clk_o;
@@ -154,7 +151,7 @@ module axis_spi_master #(
   assign m_axis_tvalid = r_m_axis_tvalid;
 
   // data is valid when the serial input counter has hit full
-  assign spi_miso_load = (spi_miso_dcount == BUS_WIDTH*8 ? (r_cpha ? r_spi_ena_miso : spi_ena_miso) : 1'b0);
+  assign spi_miso_load = (spi_miso_dcount == BUS_WIDTH*8 ? spi_ena_miso : 1'b0);
 
   // we hold if the output counter is zero.
   assign spi_mosi_load = (spi_mosi_dcount == 0 ? 1'b1 : 1'b0) & s_axis_tvalid;
@@ -175,11 +172,6 @@ module axis_spi_master #(
 
   assign mosi_dcount = spi_mosi_dcount;
   
-  // assign disable_enable = (spi_mosi_dcount == 0 && spi_miso_dcount == 0);
-  
-  // when mosi count is 0 set reload_clk high to reload synth clock.
-  // | (spi_mosi_dcount == 0);
-
   //Group: Instantiated Modules
   /*
   * Module: inst_spi_output_clk
@@ -253,20 +245,6 @@ module axis_spi_master #(
     .sdata(miso),
     .dcount(spi_miso_dcount)
   );
-  
-  
-  /*
-   * register spi_ena_miso to be a clock cycle behind to line up sipo with rising edge sample
-   */
-  always @(posedge aclk)
-  begin
-    if(arstn == 1'b0)
-    begin
-      r_spi_ena_miso <= 1'b0;
-    end else begin
-      r_spi_ena_miso <= spi_ena_miso;
-    end
-  end
 
   /*assign reload_clk = (spi_clk_dcount == 0);
    * register input data from SIPO for release only when load is activated.
@@ -333,8 +311,10 @@ module axis_spi_master #(
         begin
           data_state <= processing;
           
+          //clock generation
           if(spi_ena_mosi == 1'b1)
           begin
+            // deals with extra clock pulse on cpha == 1. since we always clock out 9 enables.
             r_clk_o <= (spi_miso_dcount == BUS_WIDTH*8 ? 1'b0 : r_cpha);
           end
             

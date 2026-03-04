@@ -23,9 +23,10 @@
 
 ### Version
 #### Current
-  - V3.0.0 - More major changes, PISO turned out to have odd bugs. Simplified original logic and removed lots of dead code.
+  - V3.0.1 - Cleanup source and remove code that no longer matters thanks to the clock gen changes.
 
 #### Previous
+  - V3.0.0 - More major changes, PISO turned out to have odd bugs. Simplified original logic and removed lots of dead code.
   - V2.0.0 - Major changes to the clock generation methods. Using a PISO is the way.
   - V1.0.0 - initial release
 
