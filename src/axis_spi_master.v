@@ -62,7 +62,7 @@
  *   miso           - receive for master input
  *   ssn_i          - slave select input
  *   ssn_o          - slave select output
- *   rate           - output rate of spi core.
+ *   rate           - output rate of spi core, integer divides with no remained will result in the best clocks with 50% duty cycle.
  *   cpol           - clock polarity of sclk
  *   cpha           - clock phase of sclk
  *   miso_dcount    - Current number of input bits available from parallel register.
